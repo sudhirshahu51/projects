@@ -1,0 +1,13 @@
+div tag is use to define a box
+class is given to describe that element
+most specific rule is applied
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
+
+padding has the color of box, padding is like inside the box a protective layer
+
+border is inherited by the color property of the box
+
+margin doesnt have a background
+
+http://scratchpad.io/even-bubble-9035

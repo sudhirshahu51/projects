@@ -1,0 +1,30 @@
+URL: uniform resource locator
+
+?name=variable&name1=variable1 is used by GET method
+#fragments: # is use to define fragments of a page, it is not send to the server as a request but only in browser.
+fragments parameters will be last in case query parameters are also there
+
+if we enter www.google.com/search in the action url of the form....the text will produce the google search results
+
+get requests sometimes are cached but post are not. Since it gets cached...it should never be used to change something on the server but only to find something on the server.
+
+jinja2 is for template module
+
+template_dir = os.path.join(os.path.dirname(__file__), 'template')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template__dir), autoescape=True)
+
+Template inheritance:
+
+base.html:
+<DOCTYPE html>
+<head><title> hello</tittle>
+<body>
+{% block content%}
+</body>
+
+extending.html:
+{% extends "base.html" %}
+
+{% block content%}
+<li>helo</li>
+{% endblock %}

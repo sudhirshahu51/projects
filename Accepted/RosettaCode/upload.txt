@@ -1,0 +1,7 @@
+=={{header|Python}}==
+{{works with|Python|3.X}}
+'''unoptimized'''
+<lang python>
+</lang>
+<pre>
+</pre>
