@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Ongoing/.idea/Ongoing.iml" filepath="$PROJECT_DIR$/../Ongoing/.idea/Ongoing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/REST_api.iml" filepath="$PROJECT_DIR$/.idea/REST_api.iml" />
+      <module fileurl="file:///srv/www/waasle/.idea/waasle.iml" filepath="/srv/www/waasle/.idea/waasle.iml" />
+    </modules>
+  </component>
+</project>

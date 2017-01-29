@@ -24,29 +24,27 @@ def geo_location(location):			# finding the coordinates (latitude and longitude)
 def find_restaurant(meal_type, location):		# function for finding the restaurants according to meal type of geographic location
     coordinates = geo_location(location)
     if coordinates[0] == 0.0 and coordinates[1] == [0.0]:	# if no place found
-        print('Sorry No such place found on planet earth, try different planet')
-        return
+        return 'No such place found'
     url = 'https://api.foursquare.com/v2/venues/search?client_id=%s&client_secret=%s&v=20130815&ll' \
           '=%s,%s&query=%s' % (CLIENT_ID, CLIENT_SECRET, coordinates[0], coordinates[1], meal_type)
     venues = json.loads(request.urlopen(url).read().decode('utf-8'))
     try:
-        for i in range(5):			# printing maximum 5 locations out of all viable locations.
-            rest_id = venues['response']['venues'][i]['id']	# unique restaurant id
-            rest_name = venues['response']['venues'][i]['name']	# restaurant name
-            rest_add = ','.join(venues['response']['venues'][i]['location']['formattedAddress'])	# restaurant address
-            url_pic = 'https://api.foursquare.com/v2/venues/%s/photos?client_id=%s&client_secret=%s&v=20161212&m=swarm'\
-                      % (rest_id, CLIENT_ID, CLIENT_SECRET)		# url of restaurant image 
-            pic = json.loads(request.urlopen(url_pic).read().decode('utf-8'))
-            try:
-                url_pic = pic['response']['photos']['items'][0]['prefix'][:-1] + pic['response']['photos']['items'][0]['suffix']
-                print(rest_name, rest_add, 'No Pic found', sep='\n', end='\n\n')
-            except IndexError:		# if no pic found 
-                print(rest_name, rest_add, url_pic, sep='\n', end='\n\n')
+        rest_id = venues['response']['venues'][0]['id']	 # unique restaurant id
+        rest_name = venues['response']['venues'][0]['name']	 # restaurant name
+        rest_add = ','.join(venues['response']['venues'][0]['location']['formattedAddress'])  # restaurant address
+        url_pic = 'https://api.foursquare.com/v2/venues/%s/photos?client_id=%s&client_secret=%s&v=20161212&m=swarm'\
+                  % (rest_id, CLIENT_ID, CLIENT_SECRET)		# url of restaurant image
+        pic = json.loads(request.urlopen(url_pic).read().decode('utf-8'))
+        try:
+            url_pic = pic['response']['photos']['items'][0]['prefix'][:-1] + pic['response']['photos']['items'][0]['suffix']
+        except IndexError:		# if no pic found
+            url_pic = 'No Pic found'
+        return {'name': rest_name, 'address': rest_add, 'image': url_pic}
     except IndexError:
-        pass
+        return "No Restaurants Found"
 
-if '__name__' == '__main__':
+
+if __name__ == '__main__':
     meal = input('Enter the of meal you want to search\n')
     loc = input('Enter the location\n')
-    find_restaurant(meal, loc)
-
+    print(find_restaurant(meal, loc))
