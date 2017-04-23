@@ -224,33 +224,28 @@ def cron():
         t = crawler('t'+str(no)+'-')
         if t:
             id_post = bchaintalk.post(bchaintalk.content(t))
-            post_dic[id_post] = t
-            if isinstance(id_post, int):
-                thread_dic.acquire(1)
-                pickle.dump(post_dic, open("post.p", "wb"))
-                thread_dic.release()
-            q1.enqueue(id_post)
-            if thread_lock_1.locked():
-                time.sleep(1)
-            else:
-                thread_lock_1.acquire()
+            if id_post:
+                post_dic[id_post] = t
+                if isinstance(id_post, int):
+                    thread_dic.acquire(1)
+                    pickle.dump(post_dic, open("post.p", "wb"))
+                    thread_dic.release()
+                q1.enqueue(id_post)
+                thread_lock_1.acquire(1)
                 pickle.dump(q1, open("q1.p", "wb"))
                 thread_lock_1.release()
-            q2.enqueue(id_post)
-            if thread_lock_2.locked():
-                time.sleep(1)
-            else:
-                thread_lock_2.acquire()
+                q2.enqueue(id_post)
+                thread_lock_2.acquire(1)
                 pickle.dump(q1, open("q2.p", "wb"))
                 thread_lock_2.release()
-            q3.enqueue(id_post)
-            bchaintalk.like(id_post)
-            boy_bitcoin.like(id_post)
-            Sumantsinha6.like(id_post)
+                q3.enqueue(id_post)
+                bchaintalk.like(id_post)
+                boy_bitcoin.like(id_post)
+                Sumantsinha6.like(id_post)
             no += 1
         else:
             print('sleeping')
-            time.sleep(10)
+            time.sleep(600)
 
 
 if __name__ == "__main__":
@@ -259,12 +254,24 @@ if __name__ == "__main__":
          'hyperledger', 'oscar', 'ibm']
     via = []
     thread_running = {}
-    q1 = Queue()
+    try:
+        q1 = pickle.load(open('q1.p', 'rb'))
+    except:
+        q1 = Queue()
     thread_lock_1 = _thread.allocate_lock()
-    q2 = Queue()
+    try:
+        q2 = pickle.load(open('q2.p', 'rb'))
+    except:
+        q2 = Queue()
     thread_lock_2 = _thread.allocate_lock()
-    q3 = Queue()
-    post_dic = {}
+    try:
+        q3 = pickle.load(open('q3.p', 'rb'))
+    except:
+        q3 = Queue()
+    try:
+        post_dic = pickle.load(open('post.p', 'rb'))
+    except:
+        post_dic = {}
     thread_dic = _thread.allocate_lock()
     bchaintalk = TwitterAccount(name='bchaintalk', acc_key='852985908446056448-GQM3S51qlNRq0GgBq2fVa5Dl1P74lzv',
                                 acc_secret='A8NK57cbHYU2DVVagSbTcUZVHGh7e9q6Gnpho6ckVPZQ4',
@@ -275,12 +282,12 @@ if __name__ == "__main__":
                                 acc_secret='HARUAfqC4S650oc9Ce0rJKDG2pqeaafcTpTt3rBfF7XVW',
                                 cons_key='kOvFRc1d6pcjJcgjlbqSEr5eq',
                                 cons_secret='Kz1ITH7Msrn0mMv7PSspqnafsH1P36cAJXyD6qUBqp2MExcSMH',
-                                 tag_acc=['bchaintalk'], via_acc=['BchainTalk'], sec=60)
+                                 tag_acc=['bchaintalk'], via_acc=['BchainTalk'], sec=3)
     Sumantsinha6 = TwitterAccount(name='Sumantsinha6', acc_key='849963540450508801-L3jaoInkjHdJc398IYlojyuHSYTOfNE',
                                 acc_secret='RIbgmKT1zn11OgsTvKiYYQavPNPJ8ma4AisN3hh7ukCGR',
                                 cons_key='YR6g3BHUcsZALvSh5u6sn02jJ',
                                 cons_secret='94xIICOYGvzCch3CB3RHNGIiJoLLYbGG7QS4xv9N4LB3tw1L3F',
-                                tag_acc=['blockchain'], via_acc=['BchainTalk'], sec=120)
+                                tag_acc=['blockchain'], via_acc=['BchainTalk'], sec=2)
     try:
         _thread.start_new_thread(thread, (boy_bitcoin, 'tweet', q1, thread_lock_1, "q1.p", post_dic,))
         thread_running[boy_bitcoin.name] = 'start'
@@ -294,3 +301,4 @@ if __name__ == "__main__":
                 break
     except (KeyboardInterrupt, SystemExit):
         sys.exit()
+
