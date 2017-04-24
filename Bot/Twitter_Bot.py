@@ -245,7 +245,7 @@ def cron():
             no += 1
         else:
             print('sleeping')
-            time.sleep(600)
+        time.sleep(600)
 
 
 if __name__ == "__main__":
